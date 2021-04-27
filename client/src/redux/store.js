@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import userReducer from './reducers/userReducer'
 import dataReducer from './reducers/dataReducer'
 import uiReducer from './reducers/uiReducer'
+import portfolioReducer from './reducers/portfolioReducer'
 
 const initialState = {}
 
@@ -16,7 +17,8 @@ const middleware = [thunk]
 const reducers = combineReducers({
   user: userReducer,
   data: dataReducer,
-  UI: uiReducer
+  UI: uiReducer,
+  portfolio: portfolioReducer
 });
 
 // Used to see data in Redux Devtools Extension

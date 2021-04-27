@@ -118,7 +118,7 @@ export const submitComment = (screamId, commentData) => (dispatch) => {
 };
 
 // get any user data via "userHandle"
-export const getUserData = (userHandle) => (dispatch) => {
+export const getPublicUserPosts = (userHandle) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
     .get(`/user/${userHandle}`)

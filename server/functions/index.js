@@ -4,8 +4,8 @@ const cors = require('cors');
 const routes = require('./routes/index');
 
 const app = express();
-
 app.use(cors())
+app.options('*', cors())
 
 //uses "/api" path since its defined in export below
 app.use("/", routes);  

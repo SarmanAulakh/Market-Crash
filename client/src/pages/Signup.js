@@ -135,7 +135,7 @@ export class Signup extends Component {
             </Button>
             <br />
             <small>
-              Already have an account? Login up <Link to="/login">here</Link>
+              Already have an account? Login <Link to="/login">here</Link>
             </small>
           </form>
         </Grid>

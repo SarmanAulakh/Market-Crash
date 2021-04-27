@@ -18,11 +18,20 @@ const {
   getUserDetails,
   markNotificationsRead
 } = require('./users')
+const {
+  getPortfolioData,
+  deletePortfolioData
+} = require('./stocks')
+const {
+  updateStock,
+  deleteStock
+} = require('../middleware/StockMiddleware')
+
 
 
 const router = express.Router();
 
-//*FBAuth middleware needed when you need to verify user token and add user obj to req 
+//!FBAuth middleware needed when you need to verify user token and add user obj to req 
 
 //scream routes
 router.get("/screams", getAllScreams)
@@ -42,5 +51,11 @@ router.post('/user', FBAuth, addUserDetails)
 router.get('/user', FBAuth, getAuthenticatedUser)
 router.get('/user/:handle', getUserDetails)
 router.post('/notifications', FBAuth, markNotificationsRead)
+
+
+//Stock market routes
+router.get('/portfolio/:handle', getPortfolioData)
+router.post('/portfolio', [updateStock.requireAuthentication, updateStock.update], getPortfolioData)
+router.delete('/portfolio', [deleteStock.requireAuthentication, deleteStock.delete], getPortfolioData)
 
 module.exports = router

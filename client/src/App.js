@@ -22,6 +22,11 @@ import store from './redux/store'
 import { SET_AUTHENTICATED } from './redux/types'
 import { logoutUser, getUserData } from './redux/actions/userAction'
 
+const theme = createTheme(ThemeObj)
+//"proxy": "https://us-central1-socialmedia-5f158.cloudfunctions.net/api" in package.json only works for dev (not prd)
+axios.defaults.baseURL = 'https://us-central1-socialmedia-5f158.cloudfunctions.net/api'
+
+
 // Authentication - Token lasts for 60 mins and refreshes (no need to relogin) unless one of the following happens:
 /*
   -User logs out
@@ -44,18 +49,13 @@ if (token) {
   }
 }
 
-const theme = createTheme(ThemeObj)
-
-//"proxy": "https://us-central1-socialmedia-5f158.cloudfunctions.net/api" in package.json only works for dev (not prd)
-axios.defaults.baseURL = 'https://us-central1-socialmedia-5f158.cloudfunctions.net/api'
-
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router>
           <Navbar />
-          <div className='container'>
+            <div className='container' >
             <Switch>
               <Route 
                 exact path="/" 

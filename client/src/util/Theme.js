@@ -1,17 +1,17 @@
 export default {
   palette: {
     primary: {
-      light: "#33c9dc",
-      main: "#00bcd4",
-      dark: "#008394",
-      contrastText: "#fff",
+      main: "#0073B6",  //blue
+      light: "",
+      dark: "",
+      contrastText: ""
     },
     secondary: {
-      light: "#ff6333",
-      main: "#ff3d00",
-      dark: "#b22a00",
-      contrastText: "#fff",
-    },
+      main: "#D2042D",  //orange
+      light: "",
+      dark: "",
+      contrastText: ""
+    }
   },
   global: {
     typography: {
@@ -96,4 +96,20 @@ export default {
       },
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
 };
+
+/**
+ * Yellow: #FFCE35
+ * Pink: #FEBEBE
+ * Purple: #3B55D9
+ * 
+ */

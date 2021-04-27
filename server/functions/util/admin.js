@@ -13,11 +13,15 @@ const auth = admin.auth();
 //connect to storage
 const store = admin.storage();
 
+//connect to database
+const realtime_db = admin.database();
+
 // Firebase App (the core Firebase SDK) is always required and must be listed before other Firebase SDKs
 const firebase = require("firebase"); 
 
-const storageBucket = process.env.storageBucket
+const storageBucket = "socialmedia-5f158.appspot.com"
 
+// NOT a security risk to expose firebase apiKey/other info: https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public
 firebase.initializeApp({
   apiKey: "AIzaSyAmdu0yYLsgJOqaX5Qe1BuLGZv5M_pQEuM",
   authDomain: "socialmedia-5f158.firebaseapp.com",
@@ -29,8 +33,7 @@ firebase.initializeApp({
   measurementId: "G-HRYZYWYW6N"
 })
 
-
-module.exports = {admin, db, auth, firebase, store, storageBucket}
+module.exports = {admin, db, auth, firebase, store, storageBucket, realtime_db}
 
 
 
@@ -44,4 +47,15 @@ module.exports = {admin, db, auth, firebase, store, storageBucket}
 //   messagingSenderId: functions.config().api.messagingsenderid,
 //   appId: functions.config().api.appid,
 //   measurementId: functions.config().api.meaurementid
+// })
+
+// firebase.initializeApp({
+//   apiKey: "AIzaSyAmdu0yYLsgJOqaX5Qe1BuLGZv5M_pQEuM",
+//   authDomain: "socialmedia-5f158.firebaseapp.com",
+//   databaseURL: "https://socialmedia-5f158-default-rtdb.firebaseio.com",
+//   projectId: "socialmedia-5f158",
+//   storageBucket: "socialmedia-5f158.appspot.com",
+//   messagingSenderId: "98194542320",
+//   appId: "1:98194542320:web:2ff7078b871959705abc35",
+//   measurementId: "G-HRYZYWYW6N"
 // })

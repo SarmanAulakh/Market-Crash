@@ -1,17 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
 // Components
-import Scream from '../components/scream/Scream';
-import StaticProfile from '../components/profile/StaticProfile';
+import UserProfile from '../components/profile/UserProfile';
 import Grid from '@material-ui/core/Grid';
-import ScreamSkeleton from '../components/skeletons/ScreamSkeleton';
 import ProfileSkeleton from '../components/skeletons/ProfileSkeleton';
+import Sidebar from '../components/layout/Sidebar'
+import Portfolio from '../components/custom/Portfolio'
+import Metrics from '../components/custom/Metrics';
+import Footer  from '../components/layout/Footer'
+import Posts from '../components/custom/Posts'
 
 // Redux
 import { connect } from 'react-redux';
-import { getUserData } from '../redux/actions/dataAction';
+import { getPublicUserPosts } from '../redux/actions/dataAction';
 
 export class User extends Component {
   state = {
@@ -26,7 +29,11 @@ export class User extends Component {
 
     if (screamId) this.setState({ screamIdParam: screamId });
 
-    this.props.getUserData(handle);
+    // TODO: combine below calls to 1 action (think about public/private pages) 
+    //gets the users posts only
+    this.props.getPublicUserPosts(handle);
+
+    //gets the users details
     axios
       .get(`/user/${handle}`)
       .then((res) => {
@@ -38,48 +45,38 @@ export class User extends Component {
   }
 
   render() {
-    const { screams, loading } = this.props.data;
-    const { screamIdParam } = this.state;
-
-    const screamsMarkup = loading ? (
-      <ScreamSkeleton />
-    ) : screams === null ? (
-      <p>No screams from this user</p>
-    ) : !screamIdParam ? (
-      screams.map((scream) => <Scream key={scream.screamId} scream={scream} />)
-    ) : (
-      screams.map((scream) => {
-        if (scream.screamId !== screamIdParam)
-          return <Scream key={scream.screamId} scream={scream} />;
-        else return <Scream key={scream.screamId} scream={scream} openDialog />;
-      })
-    );
-
-
     return (
-      <Grid container spacing={2}>
-        <Grid item sm={4} xs={12}>
-          {this.state.profile === null ? (
-            <ProfileSkeleton />
-          ) : (
-            <StaticProfile profile={this.state.profile} />
-          )}
+      <Fragment>
+        <Grid container spacing={2}>
+          <Grid item sm={3} xs={12}>
+            <Sidebar />
+          </Grid>
+          <Grid item sm={9} xs={12}>
+            {this.state.profile === null ? (
+              <ProfileSkeleton />
+            ) : (
+              <UserProfile profile={this.state.profile} />
+            )}
+            <br/>
+            <Portfolio handle={this.props.match.params.handle}/>
+            <br/>
+            <Metrics />
+            <br/>
+            <Posts screamId={this.state.screamIdParam}/>
+          </Grid>
         </Grid>
-        <Grid item sm={8} xs={12}>
-          {screamsMarkup}
-        </Grid>
-      </Grid>
+        <Footer />
+      </Fragment>
     )
   }
 }
 
 User.propTypes = {
-  getUserData: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  getPublicUserPosts: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => ({
-  data: state.data
-});
+// const mapStateToProps = (state) => ({
+//   profile: state.data
+// });
 
-export default connect(mapStateToProps,{ getUserData })(User);
+export default connect(null,{ getPublicUserPosts })(User);
