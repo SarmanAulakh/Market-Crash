@@ -8,7 +8,9 @@ app.use(cors())
 app.options('*', cors())
 
 //uses "/api" path since its defined in export below
+//? //RUN FOR LOCALHOST TESTING: firebase functions:config:get > .runtimeconfig.json
 app.use("/", routes);  
 
 exports.api = functions.https.onRequest(app);
 exports.triggers = require('./triggers/index');
+exports.scheduler = require('./util/scheduledCronJobs')

@@ -22,18 +22,13 @@ import {
 
 // Redux
 import { connect } from 'react-redux';
+import { Fragment } from 'react';
 
 const FlexibleXYPlot = makeWidthFlexible(XYPlot)
 
 const styles = (theme) => ({
   ...theme.global
 });
-
-const DATA = [
-  [{x: 1, y: 10}, {x: 2, y: 5}, {x: 3, y: 15}]
-];
-
-
 
 export class Metrics extends Component {
   constructor(props) {
@@ -48,11 +43,63 @@ export class Metrics extends Component {
   };
 
   _onNearestX = (value, {index}) => {
-    this.setState({crosshairValues: DATA.map(d => d[index])});
+    let arr = []
+    arr.push(this.props.data.history[index])
+    this.setState({crosshairValues: arr});
   };
 
   render() {
     const { classes, data, loading } = this.props;
+
+    const chart = (data.portfolio && data.history.length > 1) ? (
+      <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300} xType="ordinal">
+        <VerticalGridLines />
+        <HorizontalGridLines />
+        <XAxis />
+        <YAxis />
+        <LineSeries
+          className="area-series-example"
+          color="#D2042D"
+          curve="curveNatural"
+          data={data.history}
+          onNearestX={this._onNearestX}
+        />
+        <Crosshair
+          values={this.state.crosshairValues}
+          className={"test-class-name"}
+        />
+      </FlexibleXYPlot>
+    ) : (
+      <Fragment>
+        <FlexibleXYPlot
+                style={{ position: "relative" }}
+                dontCheckIfEmpty
+                xDomain={[0, 3]}
+                yDomain={[10, 3]}
+                height={300}
+              >
+                <VerticalGridLines />
+                <HorizontalGridLines />
+                <XAxis hideTicks title="Empty Chart: Atleast 2 day active portfolio required" />
+                <YAxis hideTicks />
+              </FlexibleXYPlot>
+              <p
+              style={{
+                position: "absolute",
+                right: "50%",
+                top: "50%",
+                transform: "translate(50%, -100%)",
+                fontSize: "24px",
+                fontStyle: "strong",
+                color: "grey"
+              }}
+              x={300 / 2}
+              y={600 / 2}
+            >
+              Insufficient Data
+            </p>
+      </Fragment>
+    ); 
 
     const markup = loading ? (
       <p>loading</p>
@@ -64,41 +111,24 @@ export class Metrics extends Component {
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Balance
-                  <span style={{"color": "black"}}>: ${data.total_current_value}</span>
+                  <span style={{"color": "black"}}>: ${data.portfolio ? data.total_current_value.toFixed(2) : 0}</span>
                 </Typography>
               </Grid>
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Gain
-                  <span style={{"color": "black"}}>: ${data.total_current_value - data.total_invested}</span>
+                  <span style={{"color": "black"}}>: ${data.portfolio ? (data.total_current_value - data.total_invested).toFixed(2) : 0}</span>
                 </Typography>
               </Grid>
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Percentage
-                  <span style={{"color": "black"}}>: {data.gain_percentage.toFixed(2)}%</span>
+                  <span style={{"color": "black"}}>: {data.portfolio ? data.gain_percentage.toFixed(2) : 0}%</span>
                 </Typography>
               </Grid>
           </Grid>
-          <Grid item sm={12}>
-          <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300}>
-            <VerticalGridLines />
-            <HorizontalGridLines />
-            {/* <XAxis hideTicks/> */}
-            <XAxis />
-            <YAxis />
-            <LineSeries
-              className="area-series-example"
-              color="#D2042D"
-              curve="curveNatural"
-              data={data.weekly_balances || [{x: 1, y: 10}, {x: 2, y: 5}, {x: 3, y: 15}]}
-              onNearestX={this._onNearestX}
-            />
-            <Crosshair
-              values={this.state.crosshairValues}
-              className={'test-class-name'}
-            />
-          </FlexibleXYPlot>
+          <Grid item sm={12} style={{ position: "relative" }}>
+            {chart}
           </Grid>
         </Grid>
     )

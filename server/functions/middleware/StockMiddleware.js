@@ -13,13 +13,14 @@ var updateStock = {
       if(availableStock){
         realtime_db.ref(`users/${req.user.handle}/portfolio/${req.body.symbol}`).set({
           avg_price: new_avg_price,
-          shares: new_share_count
+          shares: new_share_count,
+          //history
         }).then(() => {
           req.params.handle = req.user.handle;
           next();
         })
       }else{
-        res.status(406).json({error: "Invalid stock symbol"})
+        res.status(406).json({body: "Invalid stock symbol"})
       }
   }
 }
@@ -36,7 +37,36 @@ var deleteStock = {
   }
 }
 
+var getMetrics = async function (req, res, next) {
+  realtime_db
+    .ref("users/" + req.params.handle).child('weekly_balances').get()
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        let history = snapshot.val()
+        let historyArray = []
+
+        //convert date into format: month day, year
+        for(const date in history){
+          const d = (new Date(parseInt(date))).toString().split(" ")
+          historyArray.push({
+            x: `${d[1]} ${d[2]}, ${d[3]}`,
+            y: history[date]
+          })
+        }
+        req.body.history = historyArray
+
+      } else {
+        req.body.history = []
+      }
+      next();
+    }).catch((error) => {
+      res.status(500).json({error})
+    })
+}
+
+
 module.exports = {
   updateStock,
-  deleteStock
+  deleteStock,
+  getMetrics
 }

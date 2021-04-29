@@ -23,6 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
 import { getPortfolioData } from '../../redux/actions/portfolioAction';
 import { deleteStock } from '../../redux/actions/portfolioAction';
+import { Fragment } from 'react';
 
 export class Portfolio extends Component {
   componentDidMount() {
@@ -37,9 +38,9 @@ export class Portfolio extends Component {
   render() {
     const { classes, data, loading } = this.props;
     const rowsMarkup = loading ? (
-      <p>loading</p>
-    ) : Object.keys(data).length === 0  ? (
-      <p>No data</p>
+      <Fragment>loading</Fragment>
+    ) : (data.msg === "No data available" || Object.keys(data).length === 0)  ? (
+      <Fragment>No Data</Fragment>
     ) : (
       Object.entries(data.portfolioData).map(([symbol,value],i)=>
         <StyledTableRow key={symbol+'-'+i}>

@@ -138,8 +138,6 @@ export class UpdatePortfolioDialog extends Component {
                       label="Shares"
                       type="number"
                       variant="outlined"
-                      error={errors.body ? true : false}
-                      helperText={errors.body}
                       onChange={this.handleChange("shares")}
                       required
                       InputLabelProps={{
@@ -155,8 +153,6 @@ export class UpdatePortfolioDialog extends Component {
                       label="Price/Share ($)"
                       type="number"
                       variant="outlined"
-                      error={errors.body ? true : false}
-                      helperText={errors.body}
                       onChange={this.handleChange("price")}
                       required
                       InputLabelProps={{

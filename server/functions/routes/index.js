@@ -20,11 +20,13 @@ const {
 } = require('./users')
 const {
   getPortfolioData,
-  deletePortfolioData
+  deletePortfolioData,
+  getWeeklyBalances
 } = require('./stocks')
 const {
   updateStock,
-  deleteStock
+  deleteStock,
+  getMetrics
 } = require('../middleware/StockMiddleware')
 
 
@@ -54,7 +56,8 @@ router.post('/notifications', FBAuth, markNotificationsRead)
 
 
 //Stock market routes
-router.get('/portfolio/:handle', getPortfolioData)
+router.get('/portfolio/:handle', getMetrics, getPortfolioData)
+//router.post('/portfolio/:handle', getWeeklyBalances)
 router.post('/portfolio', [updateStock.requireAuthentication, updateStock.update], getPortfolioData)
 router.delete('/portfolio', [deleteStock.requireAuthentication, deleteStock.delete], getPortfolioData)
 
