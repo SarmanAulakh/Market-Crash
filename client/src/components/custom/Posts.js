@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 
 // Components
-import Scream from '../scream/Scream';
-import ScreamSkeleton from '../skeletons/ScreamSkeleton';
+import Post from "../post/Post";
+import PostSkeleton from "../skeletons/PostSkeleton";
 
 // Material UI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -16,31 +16,31 @@ import { connect } from 'react-redux';
 export class Posts extends Component {
 
   render() {
-    const { screams, loading } = this.props.data;
-    const { classes, screamId } = this.props;
+    const { posts, loading } = this.props.data;
+    const { classes, postId } = this.props;
 
-    const screamsMarkup = loading ? (
-      <ScreamSkeleton />
-    ) : screams === null ? (
-      <p>No screams from this user</p>
-    ) : !screamId ? (
-      screams.map((scream) => <Scream key={scream.screamId} scream={scream} />)
+    const postsMarkup = loading ? (
+      <PostSkeleton />
+    ) : posts === null ? (
+      <p>No posts from this user</p>
+    ) : !postId ? (
+      posts.map((post) => <Post key={post.postId} post={post} />)
     ) : (
-      screams.map((scream) => {
-        if (scream.screamId !== screamId)
-          return <Scream key={scream.screamId} scream={scream} />;
-        else return <Scream key={scream.screamId} scream={scream} openDialog />;
+      posts.map((post) => {
+        if (post.postId !== postId)
+          return <Post key={post.postId} post={post} />;
+        else return <Post key={post.postId} post={post} openDialog />;
       })
     );
 
     return (
       <Paper className={classes.paper} style={{ minWidth: "500px" }}>
         <Typography color="primary" variant="h5">
-            Recent Activity
+          Recent Activity
         </Typography>
-        {screamsMarkup}
+        {postsMarkup}
       </Paper>
-    )
+    );
   }
 }
 

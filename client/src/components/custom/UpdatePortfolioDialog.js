@@ -63,8 +63,8 @@ export class UpdatePortfolioDialog extends Component {
       avg_price: 0,
       shares: 0
     }
-
-    if(Object.keys(this.props.data).length !== 0 && this.props.data.portfolioData[this.state.symbol]){
+    console.log(this.props.data)
+    if(Object.keys(this.props.data).length !== 0 && !this.props.data.msg && this.props.data.portfolioData[this.state.symbol]){
       current_data = {
         avg_price: this.props.data.portfolioData[this.state.symbol].avg_price || 0,
         shares: this.props.data.portfolioData[this.state.symbol].shares || 0
@@ -108,9 +108,6 @@ export class UpdatePortfolioDialog extends Component {
             </Grid>
           </Grid>
           
-
-
-          
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <Grid>
@@ -150,8 +147,10 @@ export class UpdatePortfolioDialog extends Component {
                   <Grid item>
                     <TextField
                       id="standard-number"
-                      label="Price/Share ($)"
+                      label="Price/Share (USD)"
                       type="number"
+                      step={0.5}
+                      value={this.state.price}
                       variant="outlined"
                       onChange={this.handleChange("price")}
                       required
@@ -174,6 +173,19 @@ export class UpdatePortfolioDialog extends Component {
                     />
                   </Grid>
                 </Grid>
+                {/* <Grid container spacing={2} alignItems="center" justify="center">
+                  <Grid item>
+                    <FormControlLabel
+                      control={
+                        <Checkbox 
+                          checked={this.state.postUpdate} 
+                          onChange={(e) => this.setState({postUpdate: e.target.checked })} 
+                        />
+                      }
+                      label="Post Update"
+                    />
+                  </Grid>
+                </Grid> */}
                 <Grid container spacing={2} alignItems="center" justify="center">
                   <Grid item>
                     <Button

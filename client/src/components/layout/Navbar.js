@@ -1,98 +1,131 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Component
 import CustomButton from '../custom/CustomButton'
-import PostScream from '../scream/PostScream'
+import PostPost from '../post/PostPost'
 import Notifications from './Notifications'
+import EditDetails from '../profile/EditDetails'
 
 // Material UI - importing seperately rather than destructuring @material-ui/core since its a big file 
 import AppBar from '@material-ui/core/AppBar'
 import ToolBar from '@material-ui/core/ToolBar'
 import Button from '@material-ui/core/Button'
 import { fade, makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // Icons
 import HomeIcon from '@material-ui/icons/Home';
 
 // Redux
 import { connect } from 'react-redux';
+import { logoutUser } from '../../redux/actions/userAction';
 
 export function Navbar(props) {
-    const { authenticated, handle } = props;
+    const { authenticated, user: {imageUrl} } = props;
     const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const isMenuOpen = Boolean(anchorEl);
+
+    const handleProfileMenuOpen = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+      setAnchorEl(null);
+    };
+
+    const logout = () => {
+      props.logoutUser();
+      handleMenuClose();
+    }
+
     return (
       <div className={classes.grow}>
         <AppBar>
-        <ToolBar className={classes.wrapper}>
-          <Typography className={classes.title} variant="h6" noWrap>
-                Social Media
-              </Typography>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
+          <ToolBar className={classes.wrapper}>
+            <Typography className={classes.title} variant="h6" noWrap>
+                  Social Media
+                </Typography>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    inputProps={{ 'aria-label': 'search' }}
+                  />
                 </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ 'aria-label': 'search' }}
-                />
-              </div>
-              <div className={classes.grow} />
-        {authenticated ? (
-            <Fragment>
-              <div className={classes.grow} />
-              <PostScream />
-              <Link to="/">
-                <CustomButton tip="Home">
-                  <HomeIcon />
-                </CustomButton>
-              </Link>
-              <Notifications />
-              <Link to={`/users/${handle}`}>
-                <CustomButton tip="Profile">
-                  <AccountCircle />
-                </CustomButton>
-              </Link>
-              
-            </Fragment>
-          ) : (
-            <Fragment>
-              <Button color="inherit" component={Link} to="/login">
-                Login
-              </Button>
-              <Button color="inherit" component={Link} to="/">
-                Home
-              </Button>
-              <Button color="inherit" component={Link} to="/signup">
-                Signup
-              </Button>
-            </Fragment>
-          )}
-        </ToolBar>
-      </AppBar>
+                <div className={classes.grow} />
+          {authenticated ? (
+              <Fragment>
+                <div className={classes.grow} />
+                <PostPost />
+                <Link to="/">
+                  <CustomButton tip="Home">
+                    <HomeIcon />
+                  </CustomButton>
+                </Link>
+                <Notifications />
+                <MenuItem onClick={handleProfileMenuOpen}>
+                  <CustomButton tip="">
+                    <img 
+                      src={imageUrl} 
+                      alt="profile" 
+                      className={classes.profileImg} 
+                    />
+                  </CustomButton>
+                </MenuItem>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <Button color="inherit" component={Link} to="/login">
+                  Login
+                </Button>
+                <Button color="inherit" component={Link} to="/">
+                  Home
+                </Button>
+                <Button color="inherit" component={Link} to="/signup">
+                  Signup
+                </Button>
+              </Fragment>
+            )}
+          </ToolBar>
+        </AppBar>
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          id={1}
+          keepMounted
+          transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          style={{"top": "40px"}}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={logout}>
+            <Link to="/login">Logout</Link>
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <EditDetails />
+          </MenuItem>
+        </Menu>
       </div>
-      
     )
 }
 
 const useStyles = makeStyles((theme) => ({
+  ...theme.global,
   grow: {
     flexGrow: 1,
   },
@@ -156,7 +189,7 @@ Navbar.propTypes = {
 
 const mapStateToProps = (state) => ({
   authenticated: state.user.authenticated,
-  handle: state.user.credentials.handle
+  user: state.user.credentials
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps, {logoutUser})(Navbar);

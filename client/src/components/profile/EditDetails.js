@@ -17,9 +17,6 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-// Icons
-import EditIcon from '@material-ui/icons/Edit'
-
 const styles = (theme) => ({
   ...theme.global,
   button: {
@@ -35,25 +32,30 @@ export class EditDetails extends Component {
     open: false
   }
 
-  componentDidMount() {
-    this.mapUserDetailsToState(this.props.credentials);
-  }
+  // componentDidMount() {
+  //   //this.mapUserDetailsToState(this.props.credentials);
+  // }
 
-  mapUserDetailsToState = (credentials) => {
-    this.setState({
-      bio: credentials.bio ? credentials.bio : '',
-      website: credentials.website ? credentials.website : '',
-      location: credentials.location ? credentials.location : ''
-    });
-  };
+  // mapUserDetailsToState = (credentials) => {
+  //   this.setState({
+  //     bio: credentials.bio ? credentials.bio : '',
+  //     website: credentials.website ? credentials.website : '',
+  //     location: credentials.location ? credentials.location : ''
+  //   });
+  // };
 
   handleOpen = () => {
     this.setState({ open: true });
-    this.mapUserDetailsToState(this.props.credentials);
+    //this.mapUserDetailsToState(this.props.credentials);
   };
   
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({
+      bio: '',
+      website: '',
+      location: '',
+      open: false
+    });
   };
 
   handleChange = (event) => {
@@ -76,13 +78,9 @@ export class EditDetails extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <CustomButton
-          tip="Edit Details"
-          onClick={this.handleOpen}
-          btnClassName={classes.button}
-        >
-          <EditIcon color="primary" />
-        </CustomButton>
+        <span onClick={this.handleOpen}>
+          Edit Profile
+        </span>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

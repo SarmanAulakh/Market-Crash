@@ -12,17 +12,17 @@ import { clearErrors } from './dataAction'
 export const getPortfolioData = (userHandle) => (dispatch) => {
   dispatch({ type: LOADING_PORTFOLIO_DATA });
   axios
-    .get(`/portfolio/${userHandle}`)   //only need /screams since the base url in "proxy" in package.json
+    .get(`/portfolio/${userHandle}`) //only need /posts since the base url in "proxy" in package.json
     .then((res) => {
       dispatch({
         type: SET_PORTFOLIO_DATA,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch((err) => {
       dispatch({
         type: SET_PORTFOLIO_DATA,
-        payload: {}
+        payload: {},
       });
     });
 } 

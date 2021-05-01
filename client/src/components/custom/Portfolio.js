@@ -36,7 +36,10 @@ export class Portfolio extends Component {
   }
   
   render() {
-    const { classes, data, loading } = this.props;
+    const { classes, data, loading, user } = this.props;
+    const { authenticated } = user
+    const { handle } = user.credentials
+
     const rowsMarkup = loading ? (
       <Fragment>loading</Fragment>
     ) : (data.msg === "No data available" || Object.keys(data).length === 0)  ? (
@@ -44,16 +47,14 @@ export class Portfolio extends Component {
     ) : (
       Object.entries(data.portfolioData).map(([symbol,value],i)=>
         <StyledTableRow key={symbol+'-'+i}>
-            <StyledTableCell component="th" scope="row">
-              {symbol}
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row">{symbol}</StyledTableCell>
             <StyledTableCell align="right">{value.shares}</StyledTableCell>
-            <StyledTableCell align="right">{value.avg_price.toFixed(2)}</StyledTableCell>
+            <StyledTableCell align="right">{value.avg_price.toFixed(2)} {value.currency}</StyledTableCell>
             <StyledTableCell align="right">{value.current_price.toFixed(2)}</StyledTableCell>
             <StyledTableCell align="right">{value.total_value.toFixed(2)}</StyledTableCell>
             <StyledTableCell align="right">{value.total_gain.toFixed(2)}</StyledTableCell>
             <StyledTableCell align="right">
-              <CustomButton 
+              {authenticated && handle === this.props.handle ? <CustomButton 
                 tip="delete" 
                 className="no-padding" 
                 customStyle={{"padding": 0}}
@@ -61,7 +62,7 @@ export class Portfolio extends Component {
                 onClick={() => this.props.deleteStock(symbol)}
                 >
                 <DeleteIcon />
-              </CustomButton>
+              </CustomButton> : null}
             </StyledTableCell>
           </StyledTableRow>
       )
@@ -75,9 +76,9 @@ export class Portfolio extends Component {
                     Main Portfolio
                   </Typography>
                 </Grid>
-                <Grid item sm={4}>
+                {authenticated && handle === this.props.handle ? <Grid item sm={4}>
                   <UpdatePortfolioDialog />
-                </Grid>
+                </Grid> : null}
             </Grid>
         </Grid>
         <TableContainer component={Paper}>
@@ -133,7 +134,8 @@ Portfolio.propTypes = {
 
 const mapStateToProps = (state) => ({
   data: state.portfolio.portfolio,
-  loading: state.portfolio.loading
+  loading: state.portfolio.loading,
+  user: state.user
 });
 
 

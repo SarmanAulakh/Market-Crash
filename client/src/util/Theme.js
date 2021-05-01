@@ -53,25 +53,39 @@ export default {
     paper: {
       padding: 20,
     },
+    profileImg: {
+      width: 40,
+      height: 40,
+      objectFit: "cover",
+      borderRadius: "50%",
+    },
     profile: {
       "& .image-wrapper": {
-        textAlign: "center",
+        display: "flex",
+        flexWrap: "nowrap",
         position: "relative",
         "& button": {
           position: "absolute",
-          top: "80%",
-          left: "70%",
+          top: "110px",
+          left: "120px"
         },
       },
+      "& .content-wrapper": {
+        display: "flex",
+        flexWrap: "nowrap",
+        paddingLeft: 20, 
+        justifyContent: "space-between",
+        width: "100%"
+      },
       "& .profile-image": {
-        width: 200,
-        height: 200,
+        width: 150,
+        height: 150,
         objectFit: "cover",
-        maxWidth: "100%",
+        minWidth: "150px",
         borderRadius: "50%",
       },
       "& .profile-details": {
-        textAlign: "center",
+         textAlign: "center",
         "& span, svg": {
           verticalAlign: "middle",
         },

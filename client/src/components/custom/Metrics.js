@@ -51,25 +51,7 @@ export class Metrics extends Component {
   render() {
     const { classes, data, loading } = this.props;
 
-    const chart = (data.portfolio && data.history.length > 1) ? (
-      <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300} xType="ordinal">
-        <VerticalGridLines />
-        <HorizontalGridLines />
-        <XAxis />
-        <YAxis />
-        <LineSeries
-          className="area-series-example"
-          color="#D2042D"
-          curve="curveNatural"
-          data={data.history}
-          onNearestX={this._onNearestX}
-        />
-        <Crosshair
-          values={this.state.crosshairValues}
-          className={"test-class-name"}
-        />
-      </FlexibleXYPlot>
-    ) : (
+    const chart = (data.msg === "No data available" || Object.keys(data).length === 0 || data.history.length < 2) ? (
       <Fragment>
         <FlexibleXYPlot
                 style={{ position: "relative" }}
@@ -80,7 +62,7 @@ export class Metrics extends Component {
               >
                 <VerticalGridLines />
                 <HorizontalGridLines />
-                <XAxis hideTicks title="Empty Chart: Atleast 2 day active portfolio required" />
+                <XAxis hideTicks title="Empty Chart: Portfolio must be active for atleast 2 days" />
                 <YAxis hideTicks />
               </FlexibleXYPlot>
               <p
@@ -99,6 +81,25 @@ export class Metrics extends Component {
               Insufficient Data
             </p>
       </Fragment>
+    ) : (
+      
+      <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300} xType="ordinal" margin={{left: 100, right: 100}}>
+        <VerticalGridLines />
+        <HorizontalGridLines />
+        <XAxis />
+        <YAxis tickTotal={10}/>
+        <LineSeries
+          className="area-series-example"
+          color="#D2042D"
+          curve="curveLinear"
+          data={data.history}
+          onNearestX={this._onNearestX}
+        />
+        <Crosshair
+          values={this.state.crosshairValues}
+          className={"test-class-name"}
+        />
+      </FlexibleXYPlot>
     ); 
 
     const markup = loading ? (
@@ -111,19 +112,19 @@ export class Metrics extends Component {
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Balance
-                  <span style={{"color": "black"}}>: ${data.portfolio ? data.total_current_value.toFixed(2) : 0}</span>
+                  <span style={{"color": "black"}}>: ${(data.total_current_value || 0).toFixed(2)}</span>
                 </Typography>
               </Grid>
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Gain
-                  <span style={{"color": "black"}}>: ${data.portfolio ? (data.total_current_value - data.total_invested).toFixed(2) : 0}</span>
+                  <span style={{"color": "black"}}>: ${((data.total_current_value - data.total_invested) || 0).toFixed(2)}</span>
                 </Typography>
               </Grid>
               <Grid item sm={4}>
                 <Typography color="secondary" variant="h6">
                   Percentage
-                  <span style={{"color": "black"}}>: {data.portfolio ? data.gain_percentage.toFixed(2) : 0}%</span>
+                  <span style={{"color": "black"}}>: {(data.gain_percentage || 0 ).toFixed(2)}%</span>
                 </Typography>
               </Grid>
           </Grid>

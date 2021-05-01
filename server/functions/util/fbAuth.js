@@ -23,10 +23,10 @@ const FBAuth = (req, res, next) => {
         .limit(1)
         .get()
     })
-    .then(data => {
-      req.user.handle = data.docs[0].data().handle
-      req.user.imageUrl = data.docs[0].data().imageUrl
-      return next(); //finish middleware and go to route calling middleware (ex "/createScream")
+    .then((data) => {
+      req.user.handle = data.docs[0].data().handle;
+      req.user.imageUrl = data.docs[0].data().imageUrl;
+      return next(); //finish middleware and go to route calling middleware (ex "/createPost")
     })
     .catch(err => {
       console.log("Error while verifying token: ", err)

@@ -163,7 +163,7 @@ exports.getAuthenticatedUser = (req, res) => {
           recipient: doc.data().recipient,
           sender: doc.data().sender,
           createdAt: doc.data().createdAt,
-          screamId: doc.data().screamId,
+          postId: doc.data().postId,
           type: doc.data().type,
           read: doc.data().read,
           notificationId: doc.id,
@@ -185,25 +185,27 @@ exports.getUserDetails = (req, res) => {
     .then(doc => {
       if(doc.exists){
         userData.user = doc.data();
-        return db.collection('screams').where('userHandle', '==', req.params.handle)
-          .orderBy('createdAt', 'desc')
-          .get()
+        return db
+          .collection("posts")
+          .where("userHandle", "==", req.params.handle)
+          .orderBy("createdAt", "desc")
+          .get();
       }else{
         return res.status(404).json({error: 'User not found'})
       }
     })
     .then(data => {
-      userData.screams = []
-      data.forEach(doc => {
-        userData.screams.push({
+      userData.posts = [];
+      data.forEach((doc) => {
+        userData.posts.push({
           body: doc.data().body,
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
           userImage: doc.data().userImage,
           likeCount: doc.data().likeCount,
           commentCount: doc.data().commentCount,
-          screamId: doc.id
-        })
+          postId: doc.id,
+        });
       })
       return res.json(userData)
     })

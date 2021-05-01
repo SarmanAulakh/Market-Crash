@@ -1,5 +1,5 @@
 const { realtime_db } = require("../util/admin")
-const { binarySearch, stockArrayLength } = require("../util/stockSymbols")
+const { binarySearch, getExchangeArray } = require("../util/stockSymbols")
 const FBAuth = require("../util/fbAuth")
 
 var updateStock = {
@@ -7,14 +7,15 @@ var updateStock = {
   update: function(req, res, next) {
       const new_avg_price = ((req.body.current_data.avg_price*req.body.current_data.shares) + (req.body.price*req.body.shares))/(req.body.current_data.shares+req.body.shares)
       const new_share_count = req.body.current_data.shares + req.body.shares
-    
-      const availableStock = binarySearch(req.body.symbol, 0, stockArrayLength())
-
+      
+      const exchangeArray = getExchangeArray(req.body.exchange)
+      const availableStock = binarySearch(req.body.symbol, 0, exchangeArray.length-1, exchangeArray)
+      
       if(availableStock){
-        realtime_db.ref(`users/${req.user.handle}/portfolio/${req.body.symbol}`).set({
+        realtime_db.ref(`users/${req.user.handle}/portfolio/${req.body.symbol.replace(".", "~")}`).set({
           avg_price: new_avg_price,
           shares: new_share_count,
-          //history
+          currency: availableStock.currency
         }).then(() => {
           req.params.handle = req.user.handle;
           next();

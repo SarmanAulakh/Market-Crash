@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 // Components
 import CustomButton from '../custom/CustomButton'
-import DeleteScream from './DeleteScream'
-import ScreamDialog from './ScreamDialog'
+import DeletePost from './DeletePost'
+import PostDialog from './PostDialog'
 import LikeButton from './LikeButton'
 
 // DayJS
@@ -24,7 +24,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 
 // Redux
 import { connect } from 'react-redux';
-import { likeScream, unlikeScream } from '../../redux/actions/dataAction'
+import { likePost, unlikePost } from '../../redux/actions/dataAction'
 
 const styles = {
   card: {
@@ -41,17 +41,17 @@ const styles = {
   }
 };
 
-export class Scream extends Component {
+export class Post extends Component {
   render() {
     dayjs.extend(relativeTime)
     const { 
       classes, 
-      scream : { 
+      post : { 
         body, 
         createdAt, 
         userImage, 
         userHandle, 
-        screamId, 
+        postId, 
         likeCount, 
         commentCount 
       },
@@ -64,7 +64,7 @@ export class Scream extends Component {
     } = this.props
 
     const deleteButton = (authenticated && userHandle===handle) ? (
-      <DeleteScream screamId={screamId}/>
+      <DeletePost postId={postId}/>
     ) : null
 
     return (
@@ -88,14 +88,14 @@ export class Scream extends Component {
             {dayjs(createdAt).fromNow()}
           </Typography>
           <Typography variant="body1">{body}</Typography>
-          <LikeButton screamId={screamId}/>
+          <LikeButton postId={postId}/>
           <span>{likeCount} Likes</span>
           <CustomButton tip="comments">
             <ChatIcon color="primary" />
           </CustomButton>
           <span>{commentCount} comments</span>
-          <ScreamDialog
-            screamId={screamId}
+          <PostDialog
+            postId={postId}
             userHandle={userHandle}
             openDialog={this.props.openDialog}
           />
@@ -105,9 +105,9 @@ export class Scream extends Component {
   }
 }
 
-Scream.propTypes = {
+Post.propTypes = {
   user: PropTypes.object.isRequired,
-  scream: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   openDialog: PropTypes.bool
 };
@@ -117,8 +117,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = { 
-  likeScream, 
-  unlikeScream 
+  likePost, 
+  unlikePost 
 }
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Scream));  //withStyles creates a "classes" obj in component to access styles variable
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Post));  //withStyles creates a "classes" obj in component to access styles variable

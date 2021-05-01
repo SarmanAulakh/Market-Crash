@@ -14,7 +14,7 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 
 // Redux
 import { connect } from 'react-redux';
-import { deleteScream } from '../../redux/actions/dataAction';
+import { deletePost } from '../../redux/actions/dataAction';
 
 const styles = {
   deleteButton: {
@@ -24,7 +24,7 @@ const styles = {
   }
 };
 
-class DeleteScream extends Component {
+class DeletePost extends Component {
   state = {
     open: false
   }
@@ -37,8 +37,8 @@ class DeleteScream extends Component {
     this.setState({ open: false });
   }
 
-  deleteScream = () => {
-    this.props.deleteScream(this.props.screamId);
+  deletePost = () => {
+    this.props.deletePost(this.props.postId);
     this.setState({ open: false });
   }
 
@@ -48,7 +48,7 @@ class DeleteScream extends Component {
     return (
       <Fragment>
         <CustomButton
-          tip="Delete Scream"
+          tip="Delete Post"
           onClick={this.handleOpen}
           btnClassName={classes.deleteButton}
         >
@@ -60,27 +60,25 @@ class DeleteScream extends Component {
           fullWidth
           maxWidth="sm"
         >
-          <DialogTitle>
-            Are you sure you want to delete this scream ?
-          </DialogTitle>
+          <DialogTitle>Are you sure you want to delete this post ?</DialogTitle>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.deleteScream} color="secondary">
+            <Button onClick={this.deletePost} color="secondary">
               Delete
             </Button>
           </DialogActions>
         </Dialog>
       </Fragment>
-    )
+    );
   }
 }
 
-DeleteScream.propTypes = {
-  deleteScream: PropTypes.func.isRequired,
+DeletePost.propTypes = {
+  deletePost: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  screamId: PropTypes.string.isRequired
+  postId: PropTypes.string.isRequired,
 };
 
-export default connect(null, { deleteScream })(withStyles(styles)(DeleteScream));
+export default connect(null, { deletePost })(withStyles(styles)(DeletePost));

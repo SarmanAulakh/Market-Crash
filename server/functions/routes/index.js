@@ -1,14 +1,14 @@
 const express = require('express');
 const FBAuth = require("../util/fbAuth")
-const { 
-  getAllScreams, 
-  createScream, 
-  getScream, 
-  commentOnScream,
-  likeScream,
-  unlikeScream,
-  deleteScream
-} = require('./screams')
+const {
+  getAllPosts,
+  createPost,
+  getPost,
+  commentOnPost,
+  likePost,
+  unlikePost,
+  deletePost,
+} = require("./posts");
 const { 
   login, 
   signup, 
@@ -35,14 +35,14 @@ const router = express.Router();
 
 //!FBAuth middleware needed when you need to verify user token and add user obj to req 
 
-//scream routes
-router.get("/screams", getAllScreams)
-router.post("/createScream", FBAuth, createScream)  //FBAuth is a custom middleware function that runs before createScream to autheniticate jwt token
-router.get("/scream/:screamId", getScream)
-router.delete('/scream/:screamId', FBAuth, deleteScream)
-router.get('/scream/:screamId/like', FBAuth, likeScream)
-router.get('/scream/:screamId/unlike', FBAuth, unlikeScream)
-router.post('/scream/:screamId/comment', FBAuth, commentOnScream)
+//post routes
+router.get("/posts", getAllPosts)
+router.post("/createPost", FBAuth, createPost)  //FBAuth is a custom middleware function that runs before createPost to autheniticate jwt token
+router.get("/post/:postId", getPost);
+router.delete("/post/:postId", FBAuth, deletePost);
+router.get("/post/:postId/like", FBAuth, likePost);
+router.get("/post/:postId/unlike", FBAuth, unlikePost);
+router.post("/post/:postId/comment", FBAuth, commentOnPost);
 
 //user routes ("handle" = username)
 //Note: One route to login user and another to get user info since it makes initial sign in faster

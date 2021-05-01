@@ -3,9 +3,9 @@ import {
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
   LOADING_USER,
-  LIKE_SCREAM,
-  UNLIKE_SCREAM,
-  MARK_NOTIFICATIONS_READ
+  LIKE_POST,
+  UNLIKE_POST,
+  MARK_NOTIFICATIONS_READ,
 } from "../types";
 
 const intitialState = {
@@ -21,7 +21,7 @@ export default function (state = intitialState, action) {
     case SET_AUTHENTICATED:
       return {
         ...state,
-        authenticated: true
+        authenticated: true,
       };
     case SET_UNAUTHENTICATED:
       return intitialState;
@@ -29,33 +29,35 @@ export default function (state = intitialState, action) {
       return {
         authenticated: true,
         loading: false,
-        ...action.payload
+        ...action.payload,
       };
     case LOADING_USER:
       return {
         ...state,
-        loading: true
-      }
-    case LIKE_SCREAM:
+        loading: true,
+      };;
+    case LIKE_POST:
       return {
         ...state,
         likes: [
           ...state.likes,
           {
             userHandle: state.credentials.handle,
-            screamId: action.payload.screamId,
-          }
-        ]
+            postId: action.payload.postId,
+          },
+        ],
       };
-    case UNLIKE_SCREAM:
+    case UNLIKE_POST:
       return {
         ...state,
-        likes: state.likes.filter((like) => like.screamId !== action.payload.screamId)
+        likes: state.likes.filter(
+          (like) => like.postId !== action.payload.postId
+        ),
       };
     case MARK_NOTIFICATIONS_READ:
       state.notifications.forEach((not) => (not.read = true));
       return {
-        ...state
+        ...state,
       };
     default:
       return state;

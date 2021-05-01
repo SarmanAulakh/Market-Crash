@@ -48,13 +48,13 @@ const styles = (theme) => ({
   }
 });
 
-const ScreamSkeleton = (props) => {
+const PostSkeleton = (props) => {
   const { classes } = props;
   //process.env.PUBLIC_URL + '/yourPathHere.jpg'
   //TODO: 5 loading cards to display. Change so its enough to fill 100% of device height
   const content = Array.from({ length: 5 }).map((item, index) => (
     <Card className={classes.card} key={index}>
-      <CardMedia className={classes.cover} image={'/images/no-img.png'} />  
+      <CardMedia className={classes.cover} image={"/images/no-img.png"} />
       <CardContent className={classes.cardContent}>
         <div className={classes.handle} />
         <div className={classes.date} />
@@ -68,8 +68,8 @@ const ScreamSkeleton = (props) => {
   return <Fragment>{content}</Fragment>;
 };
 
-ScreamSkeleton.propTypes = {
-  classes: PropTypes.object.isRequired
+PostSkeleton.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ScreamSkeleton);
+export default withStyles(styles)(PostSkeleton);

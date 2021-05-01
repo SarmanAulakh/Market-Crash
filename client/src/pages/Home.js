@@ -4,54 +4,47 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid'
 
 // Components
-import { Scream, Profile } from '../components'
-import ScreamSkeleton from '../components/skeletons/ScreamSkeleton'
-import ProfileSkeleton from '../components/skeletons/ProfileSkeleton'
+import { Post } from "../components";
+import PostSkeleton from "../components/skeletons/PostSkeleton";
 
 // Redux
 import { connect } from 'react-redux';
-import { getScreams } from '../redux/actions/dataAction';
+import { getPosts } from "../redux/actions/dataAction";
 
 export class Home extends Component {
   componentDidMount(){
-    this.props.getScreams()
+    this.props.getPosts();
   }
 
   render() {
-    const { screams, loading } = this.props.data
+    const { posts, loading } = this.props.data;
 
-    let recentScreamMarkup = !loading ? (
-      screams.map(scream => <Scream key={scream.screamId} scream={scream}/>)
+    let recentPostMarkup = !loading ? (
+      posts.map((post) => <Post key={post.postId} post={post} />)
     ) : (
-      <ScreamSkeleton />
-    )
-
-    let profileMarkup = !loading ? (
-      <Profile />
-    ) : (
-      <ProfileSkeleton />
-    )
+      <PostSkeleton />
+    );
 
     return (
-     <Grid container spacing={2}>
-       <Grid item sm={4} xs={12}>
-         {profileMarkup}
-       </Grid>
-       <Grid item sm={8} xs={12}>
-         {recentScreamMarkup}
-       </Grid>
-     </Grid>
-    )
+      <Grid container spacing={2}>
+        <Grid item sm={4} xs={12}>
+          hi
+        </Grid>
+        <Grid item sm={8} xs={12}>
+          {recentPostMarkup}
+        </Grid>
+      </Grid>
+    );
   }
 }
 
 Home.propTypes = {
-  getScreams: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  getPosts: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   data: state.data
 });
 
-export default connect(mapStateToProps, { getScreams })(Home);
+export default connect(mapStateToProps, { getPosts })(Home);

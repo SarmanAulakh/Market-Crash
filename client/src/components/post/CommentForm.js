@@ -36,7 +36,7 @@ export class CommentForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.submitComment(this.props.screamId, { body: this.state.body });
+    this.props.submitComment(this.props.postId, { body: this.state.body });
   }
 
   render() {
@@ -44,12 +44,12 @@ export class CommentForm extends Component {
     const errors = this.state.errors;
 
     const commentFormMarkup = authenticated ? (
-      <Grid item sm={12} style={{ textAlign: 'center' }}>
+      <Grid item sm={12} style={{ textAlign: "center" }}>
         <form onSubmit={this.handleSubmit}>
           <TextField
             name="body"
             type="text"
-            label="Comment on scream"
+            label="Comment on post"
             error={errors.comment ? true : false}
             helperText={errors.comment}
             value={this.state.body}
@@ -78,8 +78,8 @@ CommentForm.propTypes = {
   submitComment: PropTypes.func.isRequired,
   UI: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  screamId: PropTypes.string.isRequired,
-  authenticated: PropTypes.bool.isRequired
+  postId: PropTypes.string.isRequired,
+  authenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({

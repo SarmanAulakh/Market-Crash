@@ -14,34 +14,21 @@ import Posts from '../components/custom/Posts'
 
 // Redux
 import { connect } from 'react-redux';
-import { getPublicUserPosts } from '../redux/actions/dataAction';
+import { getPublicUser } from '../redux/actions/dataAction';
 
 export class User extends Component {
   state = {
     profile: null,
-    screamIdParam: null
-  }
+    postIdParam: null,
+  };
 
   componentDidMount() {
     //match holds info about url, params, etc. (see Route path in App.js)
     const handle = this.props.match.params.handle;
-    const screamId = this.props.match.params.screamId;
+    const postId = this.props.match.params.postId;
 
-    if (screamId) this.setState({ screamIdParam: screamId });
-
-    // TODO: combine below calls to 1 action (think about public/private pages) 
-    //gets the users posts only
-    this.props.getPublicUserPosts(handle);
-
-    //gets the users details
-    axios
-      .get(`/user/${handle}`)
-      .then((res) => {
-        this.setState({
-          profile: res.data.user
-        });
-      })
-      .catch((err) => console.log(err));
+    if (postId) this.setState({ postIdParam: postId });
+    this.props.getPublicUser(handle);
   }
 
   render() {
@@ -52,31 +39,38 @@ export class User extends Component {
             <Sidebar />
           </Grid>
           <Grid item sm={9} xs={12}>
-            {this.state.profile === null ? (
+            {!this.props.profile.users ? (
               <ProfileSkeleton />
             ) : (
-              <UserProfile profile={this.state.profile} />
+              // If logged in user equals public page user
+              this.props.profile.users.handle === this.props.user.handle ?
+              (
+                <UserProfile profile={this.props.user} loggedInUser={true} />
+              ) : (
+                <UserProfile profile={this.props.profile.users} loggedInUser={false}/>
+              )
             )}
-            <br/>
-            <Portfolio handle={this.props.match.params.handle}/>
-            <br/>
+            <br  />
+            <Portfolio handle={this.props.match.params.handle}  />
+            <br  />
             <Metrics />
-            <br/>
-            <Posts screamId={this.state.screamIdParam}/>
+            <br  />
+            <Posts postId={this.state.postIdParam}  />
           </Grid>
         </Grid>
         <Footer />
       </Fragment>
-    )
+    );;
   }
 }
 
 User.propTypes = {
-  getPublicUserPosts: PropTypes.func.isRequired
+  getPublicUser: PropTypes.func.isRequired
 };
 
-// const mapStateToProps = (state) => ({
-//   profile: state.data
-// });
+const mapStateToProps = (state) => ({
+  profile: state.data,
+  user: state.user.credentials
+});
 
-export default connect(null,{ getPublicUserPosts })(User);
+export default connect(mapStateToProps,{ getPublicUser })(User);

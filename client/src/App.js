@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import createTheme from '@material-ui/core/styles/createMuiStrictModeTheme';
 import jwtDecode from 'jwt-decode';
@@ -55,28 +55,17 @@ function App() {
       <Provider store={store}>
         <Router>
           <Navbar />
-            <div className='container' >
+          <div className="container">
             <Switch>
-              <Route 
-                exact path="/" 
-                component={Home}
-                />
-              <AuthRoute 
-                exact path="/login" 
-                component={Login}
-                />
-              <AuthRoute 
-                exact path="/signup"
-                component={Signup}
-                />
-              <Route 
-                exact path="/users/:handle" 
-                component={User} 
-                />
+              <Route exact path="/" component={Home} />
+              <AuthRoute exact path="/login" component={Login} />
+              <AuthRoute exact path="/signup" component={Signup} />
+              <Route exact path="/users/:handle" component={User} />
               <Route
-                exact path="/users/:handle/scream/:screamId"
+                exact
+                path="/users/:handle/post/:postId"
                 component={User}
-                />
+              />
             </Switch>
           </div>
         </Router>

@@ -1,9 +1,4 @@
 import Navbar from './layout/Navbar'
-import Scream from './scream/Scream'
-import Profile from './profile/Profile'
+import Post from "./post/Post";
 
-export {
-  Navbar,
-  Scream,
-  Profile
-}
+export { Navbar, Post };

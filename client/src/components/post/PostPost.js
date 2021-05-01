@@ -17,7 +17,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 // Redux
 import { connect } from 'react-redux';
-import { postScream, clearErrors } from '../../redux/actions/dataAction';
+import { postPost, clearErrors } from "../../redux/actions/dataAction";
 
 const styles = (theme) => ({
   ...theme.global,
@@ -36,48 +36,51 @@ const styles = (theme) => ({
   }
 });
 
-export class PostScream extends Component {
+export class PostPost extends Component {
   state = {
     open: false,
-    body: '',
-    errors: {}
+    body: "",
+    errors: {},
   };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.UI.errors) {
       this.setState({
-        errors: nextProps.UI.errors
+        errors: nextProps.UI.errors,
       });
     }
     if (!nextProps.UI.errors && !nextProps.UI.loading) {
-      this.setState({ body: '', open: false, errors: {} });
+      this.setState({ body: "", open: false, errors: {} });
     }
   }
-  
+
   handleOpen = () => {
     this.setState({ open: true });
-  }
+  };
 
   handleClose = () => {
     this.props.clearErrors();
     this.setState({ open: false, errors: {} });
-  }
+  };
 
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
-  }
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.postScream({ body: this.state.body });
-  }
+    this.props.postPost({ body: this.state.body });
+  };
 
   render() {
     const { errors } = this.state;
-    const { classes, UI: { loading }} = this.props;
+    const {
+      classes,
+      UI: { loading },
+    } = this.props;
     return (
       <Fragment>
-        <CustomButton onClick={this.handleOpen} tip="Post a Scream!">
+        <CustomButton onClick={this.handleOpen} tip="New Post">
           <AddIcon />
         </CustomButton>
         <Dialog
@@ -93,16 +96,16 @@ export class PostScream extends Component {
           >
             <CloseIcon />
           </CustomButton>
-          <DialogTitle>Post a new scream</DialogTitle>
+          <DialogTitle>Share a new Post!</DialogTitle>
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField
                 name="body"
                 type="text"
-                label="New Scream"
+                label="New Post"
                 multiline
                 rows="3"
-                placeholder="Scream your lungs out!"
+                placeholder="TSLA to the 🚀🌕!"
                 error={errors.body ? true : false}
                 helperText={errors.body}
                 className={classes.textField}
@@ -128,18 +131,20 @@ export class PostScream extends Component {
           </DialogContent>
         </Dialog>
       </Fragment>
-    )
+    );;;;;
   }
 }
 
-PostScream.propTypes = {
-  postScream: PropTypes.func.isRequired,
+PostPost.propTypes = {
+  postPost: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
-  UI: PropTypes.object.isRequired
+  UI: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI
 });
 
-export default connect(mapStateToProps, { postScream, clearErrors })(withStyles(styles)(PostScream));
+export default connect(mapStateToProps, { postPost, clearErrors })(
+  withStyles(styles)(PostPost)
+);
