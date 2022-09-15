@@ -22,14 +22,7 @@ function binarySearch(symbol, start, end, exchangeStocksArray){
 //binarySearch("DND.TO", 0, TO.length-1, TO)
 
 function getExchangeArray(exchange){
-  switch(exchange){
-    case "TO":
-      return TO
-    case "US":
-      return US
-    default:
-      return US
-  }
+  return US;
 }
 // US, TO, V (tsx)
 function getStockSymbolsArray(exchange){

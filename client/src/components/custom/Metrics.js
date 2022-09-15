@@ -83,10 +83,10 @@ export class Metrics extends Component {
       </Fragment>
     ) : (
       
-      <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300} xType="ordinal" margin={{left: 100, right: 100}}>
+      <FlexibleXYPlot onMouseLeave={this._onMouseLeave} height={300} xType="ordinal" margin={{left: 70, right: 50, bottom: 80 }}>
         <VerticalGridLines />
         <HorizontalGridLines />
-        <XAxis />
+        <XAxis tickLabelAngle={-45} />
         <YAxis tickTotal={10}/>
         <LineSeries
           className="area-series-example"

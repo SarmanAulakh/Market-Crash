@@ -60,7 +60,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <AuthRoute exact path="/login" component={Login} />
               <AuthRoute exact path="/signup" component={Signup} />
-              <Route exact path="/users/:handle" component={User} />
+              <Route exact path="/users/:handle" render={(props) => <User {...props} key={Date.now()}/>} />
               <Route
                 exact
                 path="/users/:handle/post/:postId"
