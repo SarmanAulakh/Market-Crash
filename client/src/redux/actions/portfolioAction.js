@@ -29,7 +29,7 @@ export const getPortfolioData = (userHandle) => (dispatch) => {
 
 export const postStock = (newStock) => (dispatch) => {
   dispatch({ type: LOADING_UI })
-  axios.post('/portfolio', newStock)
+  axios.post('/portfolio', {...newStock, exchange: 'US'})
     .then(res => {
       dispatch({ type: SET_PORTFOLIO_DATA, payload: res.data})
       dispatch(clearErrors());
